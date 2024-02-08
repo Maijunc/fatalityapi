@@ -1,0 +1,36 @@
+spring:
+  servlet:
+    multipart:
+      max-request-size: 100MB
+      max-file-size: 100MB
+  datasource:
+    url: jdbc:mysql://8.134.153.172:3306/fatality
+    username: admin
+    password: Hdbc_2024
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  redis:
+    data:
+      host: localhost
+      database: 0
+      port: 6379
+      password:
+      jedis:
+        pool:
+          max-active: 8
+          max-wait: -1ms
+          max-idle: 8
+          min-idle: 0
+      timeout: 20000ms
+  application:
+    name: fatality
+
+server:
+  port: 8080
+
+wxmini:
+  appid: 'wx5f08bee8db15caa5'
+  secret: '4eb73090bda834e5aac13ffd77687adf'
+
+mybatis:
+  configuration:
+    map-underscope-to-camel-case: true
