@@ -1,6 +1,7 @@
 package com.hdbc.controller;
 
 import com.hdbc.common.Result;
+import com.hdbc.handler.NoAuth;
 import com.hdbc.service.WhatToEatTodayService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,7 @@ public class WhatToEatTodayController {
     }
 
     @GetMapping("/getDefaultPool")
+    @NoAuth
     public Result getDefaultPool()
     {
         log.info("获取默认食物池");

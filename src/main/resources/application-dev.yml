@@ -8,12 +8,11 @@ spring:
     username: admin
     password: Hdbc_2024
     driver-class-name: com.mysql.cj.jdbc.Driver
-  redis:
-    data:
-      host: localhost
-      database: 0
+  data:
+    redis:
+      host: 8.134.153.172
       port: 6379
-      password:
+      database: 0
       jedis:
         pool:
           max-active: 8
@@ -34,3 +33,7 @@ wxmini:
 mybatis:
   configuration:
     map-underscope-to-camel-case: true
+
+    logging:
+      level:
+        org.springframework.boot.autoconfigure: DEBUG

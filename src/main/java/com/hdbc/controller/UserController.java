@@ -2,6 +2,7 @@ package com.hdbc.controller;
 
 import com.hdbc.common.Result;
 import com.hdbc.common.ResultCode;
+import com.hdbc.handler.NoAuth;
 import com.hdbc.model.WXAuth;
 import com.hdbc.pojo.Group;
 import com.hdbc.pojo.GroupWithTasks;
@@ -27,6 +28,7 @@ public class UserController {
 
     //getSessionID
     @GetMapping("/getSessionID")
+    @NoAuth
     public Result getSessionID(String code)
     {
         log.info("获取SessionID");
@@ -39,6 +41,7 @@ public class UserController {
     }
 
     @PostMapping("/authLogin")
+    @NoAuth
     public Result authLogin(@RequestBody WXAuth wxAuth)
     {
         Result result = userService.authLogin(wxAuth);
@@ -47,9 +50,8 @@ public class UserController {
     }
 
     @GetMapping("/userinfo")
-    public Result userinfo(@RequestHeader("Authorization") String token,
-                           Boolean refresh){
-        return userService.userinfo(token,refresh);
+    public Result userinfo(Boolean refresh){
+        return userService.userinfo(refresh);
     }
 
     @GetMapping("/getGroupHistory")

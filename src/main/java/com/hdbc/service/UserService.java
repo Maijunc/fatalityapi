@@ -14,5 +14,5 @@ public interface UserService {
 
     Result authLogin(WXAuth wxAuth);
 
-    Result userinfo(String token, Boolean refresh);
+    Result userinfo(Boolean refresh);
 }

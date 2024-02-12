@@ -4,6 +4,7 @@ import cn.hutool.http.HttpUtil;
 import com.alibaba.fastjson.JSON;
 import com.hdbc.common.RedisKey;
 import com.hdbc.common.Result;
+import com.hdbc.handler.UserThreadLocal;
 import com.hdbc.mapper.UserMapper;
 import com.hdbc.model.WXAuth;
 import com.hdbc.pojo.Group;
@@ -56,7 +57,9 @@ public class UserServiceImpl implements UserService{
         String res = HttpUtil.get(replaceUrl);
         //随机生成一个uuid对应一个用户
         String uuid = UUID.randomUUID().toString();
+        System.out.println(res);
         redisTemplate.opsForValue().set(RedisKey.WX_SESSION_ID + uuid, res, 30, TimeUnit.MINUTES);
+        System.out.println(redisTemplate.opsForValue().get("wx_session_id6b07674e-edec-4d79-9749-dfcbf7936596"));
         return uuid;
     }
 
@@ -97,32 +100,23 @@ public class UserServiceImpl implements UserService{
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return null;
+        return Result.FAIL();
     }
 
     @Override
-    public Result userinfo(String token, Boolean refresh) {
+    public Result userinfo(Boolean refresh) {
         /*
          * 1. 根据token，来验证此token 是否有效
          * 2. refresh 如果为true 代表刷新 重新生成token和redis里面重新存储 续期
          * 3. false 直接返回用户信息 -> redis中 查询出来 直接返回
          */
-        token = token.replace("Bearer ","");
-        boolean verify = JWTUtils.verify(token);
-        if(!verify){
-            return Result.FAIL("未登录");
-        }
-        String userJson = redisTemplate.opsForValue().get(RedisKey.TOKEN + token);
-        if(StringUtils.isBlank(userJson)){
-            return Result.FAIL("未登录");
-        }
-        UserDto userDto = JSON.parseObject(userJson,UserDto.class);
+        UserDto userDto = UserThreadLocal.get();
         if(refresh){
-            token = JWTUtils.sign(userDto.getId());
+            String token = JWTUtils.sign(userDto.getId());
             userDto.setToken(token);
             redisTemplate.opsForValue().set(RedisKey.TOKEN+token,JSON.toJSONString(userDto),7,TimeUnit.DAYS);
         }
-        return null;
+        return Result.SUCCESS(userDto);
     }
 
     private Result login(UserDto userDto) {
