@@ -3,9 +3,9 @@ package com.hdbc.service.impl;
 import com.hdbc.common.Result;
 import com.hdbc.common.ResultCode;
 import com.hdbc.mapper.DefaultPoolMapper;
-import com.hdbc.mapper.UserFoodPoolMapper;
+import com.hdbc.mapper.UserTaskPoolMapper;
 import com.hdbc.pojo.Pool;
-import com.hdbc.service.WhatToEatTodayService;
+import com.hdbc.service.WhatToDoTodayService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,16 +13,16 @@ import java.util.LinkedList;
 import java.util.List;
 
 @Service
-public class WhatToEatTodayServiceImpl implements WhatToEatTodayService{
+public class WhatToDoTodayServiceImpl implements WhatToDoTodayService {
     @Autowired
     private DefaultPoolMapper defaultPoolMapper;
 
     @Autowired
-    private UserFoodPoolMapper userFoodPoolMapper;
+    private UserTaskPoolMapper userTaskPoolMapper;
 
     @Override
     public List<Pool> getPool(long userID) {
-        List<String> poolNameList = userFoodPoolMapper.getPoolNameByUserID(userID);
+        List<String> poolNameList = userTaskPoolMapper.getPoolNameByUserID(userID);
         if(poolNameList.isEmpty()){
             return null;
         }
@@ -30,7 +30,7 @@ public class WhatToEatTodayServiceImpl implements WhatToEatTodayService{
         List<Pool> pools = new LinkedList<>();
 
         for(String poolName : poolNameList){
-            Pool tmp = new Pool(userID,poolName,userFoodPoolMapper.getPoolByName(userID, poolName));
+            Pool tmp = new Pool(userID,poolName,userTaskPoolMapper.getPoolByName(userID, poolName));
             pools.add(tmp);
         }
         return pools;
@@ -43,11 +43,11 @@ public class WhatToEatTodayServiceImpl implements WhatToEatTodayService{
 
     @Override
     public Result setPool(Pool pool) {
-        if(!userFoodPoolMapper.getPoolByName(pool.getUserID(),pool.getPoolName()).isEmpty()){
+        if(!userTaskPoolMapper.getPoolByName(pool.getUserID(),pool.getPoolName()).isEmpty()){
             return Result.FAIL(ResultCode.POOL_NAME_EXISTED);
         }
-        for(String foodName : pool.getList()){
-            userFoodPoolMapper.setPool(pool.getUserID(), foodName, pool.getPoolName());
+        for(String taskName : pool.getList()){
+            userTaskPoolMapper.setPool(pool.getUserID(), taskName, pool.getPoolName());
         }
 
         return Result.SUCCESS();

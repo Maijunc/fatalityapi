@@ -5,7 +5,7 @@ import com.hdbc.pojo.Pool;
 
 import java.util.List;
 
-public interface WhatToEatTodayService {
+public interface WhatToDoTodayService {
     List<Pool> getPool(long userID);
 
     List<String> getDefaultPool(String aspect, String defaultPoolName);
