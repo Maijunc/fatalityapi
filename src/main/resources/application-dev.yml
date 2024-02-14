@@ -20,6 +20,7 @@ spring:
           max-idle: 8
           min-idle: 0
       timeout: 20000ms
+      password: 123456
   application:
     name: fatality
 
@@ -27,8 +28,8 @@ server:
   port: 8080
 
 wxmini:
-  appid: 'wx5f08bee8db15caa5'
-  secret: '4eb73090bda834e5aac13ffd77687adf'
+  appid: 'wxd6d03f686b294837'
+  secret: '8ca61fe662444bd65f200da2fc19d33f'
 
 mybatis:
   configuration:
@@ -37,3 +38,4 @@ mybatis:
     logging:
       level:
         org.springframework.boot.autoconfigure: DEBUG
+  mapper-locations: classpath:mapper/*Mapper.xml

@@ -14,6 +14,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 
+import java.io.IOException;
+
 
 //拦截器的使用 要放入mvc配置当中
 @Component
@@ -42,6 +44,9 @@ public class LoginHandler implements HandlerInterceptor {
             return true;
         }
         String token = request.getHeader("Authorization");
+        if (StringUtils.isBlank(token)){
+            return noLoginResponse(response);
+        }
         token = token.replace("Bearer ","");
         boolean verify = JWTUtils.verify(token);
         if(!verify){
@@ -59,5 +64,11 @@ public class LoginHandler implements HandlerInterceptor {
         // 得到了用户信息 放入ThreadLocal当中
         UserThreadLocal.put(userDto);
         return true;
+    }
+
+    private boolean noLoginResponse(HttpServletResponse response) throws IOException {
+        response.setContentType("application/json;charset=utf-8");
+        response.getWriter().write(JSON.toJSONString(Result.FAIL("未登录")));
+        return false;
     }
 }

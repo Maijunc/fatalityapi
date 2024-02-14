@@ -22,7 +22,5 @@ public interface UserMapper{
     @Select("SELECT * FROM t_user WHERE openid = #{openid} LIMIT 1")
     User selectByOpenId(@Param("openid") String openid);
 
-    @Insert("insert into t_user(nickname, openid, session_key, portrait, gender, username, password, background, wx_union_id) " +
-            "values (#{nickname},#{openid},#{sessionKey},#{portrait},#{gender},#{username},#{password},#{background},#{wxUnionID})")
     void insert(User user);
 }

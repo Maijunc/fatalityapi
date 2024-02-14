@@ -26,7 +26,6 @@ public class UserController {
     @Autowired
     private TaskService taskService;
 
-    //getSessionID
     @GetMapping("/getSessionID")
     @NoAuth
     public Result getSessionID(String code)
@@ -55,6 +54,7 @@ public class UserController {
     }
 
     @GetMapping("/getGroupHistory")
+    @NoAuth
     public Result getGroupHistory(Integer userID)
     {
         log.info("历史记录");
