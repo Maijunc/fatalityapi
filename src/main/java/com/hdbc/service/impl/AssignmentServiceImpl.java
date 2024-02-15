@@ -12,7 +12,12 @@ public class AssignmentServiceImpl implements AssignmentService {
     private AssignmentMapper assignmentMapper;
 
     @Override
-    public void insert(Integer userID, Integer groupID, Integer taskID, String taskName) {
+    public boolean insert(Integer userID, Integer groupID, Integer taskID, String taskName) {
+        if(assignmentMapper.check(userID,groupID) > 0){
+            return false;
+        }
         assignmentMapper.insert(userID, groupID, taskID, taskName);
+
+        return true;
     }
 }

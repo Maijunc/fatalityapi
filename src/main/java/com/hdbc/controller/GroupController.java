@@ -1,6 +1,7 @@
 package com.hdbc.controller;
 
 import com.hdbc.common.Result;
+import com.hdbc.common.ResultCode;
 import com.hdbc.pojo.Group;
 import com.hdbc.pojo.GroupWithTasks;
 import com.hdbc.pojo.Task;
@@ -59,10 +60,13 @@ public class GroupController {
             return Result.FAIL("该任务已满员!");
 
         //插入一条用户任务匹配数据
-        assignmentService.insert(userID,groupID,taskID,task.getTaskName());
+        if(!assignmentService.insert(userID,groupID,taskID,task.getTaskName())){
+            return Result.FAIL(ResultCode.ASSIGNMENT_EXISTED);
+        }
+
 
         //更新修改时间
-
+        groupService.updateTime(groupID);
 
         return Result.SUCCESS();
     }

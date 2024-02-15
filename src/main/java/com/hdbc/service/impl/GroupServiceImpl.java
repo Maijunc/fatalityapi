@@ -6,6 +6,8 @@ import com.hdbc.service.GroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
 @Service
 public class GroupServiceImpl implements GroupService {
     @Autowired
@@ -14,5 +16,12 @@ public class GroupServiceImpl implements GroupService {
     @Override
     public void insert(Group group) {
         groupMapper.insert(group);
+    }
+
+    @Override
+    public void updateTime(Integer groupID) {
+        LocalDateTime currentTime = LocalDateTime.now();
+
+        groupMapper.updateTime(groupID,currentTime);
     }
 }

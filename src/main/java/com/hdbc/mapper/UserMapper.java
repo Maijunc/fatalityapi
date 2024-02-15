@@ -14,6 +14,9 @@ public interface UserMapper{
             "where user_id = #{userID};")
     @Results({
             @Result(property = "groupID", column = "group_id"),
+            @Result(property = "groupName", column = "group_name"),
+            @Result(property = "createTime", column = "create_time"),
+            @Result(property = "updateTime", column = "update_time"),
             //这里必须要手动映射，可能是因为有内连接的原因
             //如果不手动映射得到的group就是空的
     })
