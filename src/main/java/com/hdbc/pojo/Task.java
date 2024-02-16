@@ -1,8 +1,6 @@
 package com.hdbc.pojo;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
 public class Task {
@@ -14,12 +12,12 @@ public class Task {
     /** 剩余任务人数 */
     private Integer leftNumber ;
 
-    public Task(Integer taskID, String taskName, Integer teamNumber)
+    public Task(Integer taskID, String taskName, Integer teamNumber, Integer leftNumber)
     {
         this.taskID = taskID;
         this.taskName = taskName;
         this.teamNumber = teamNumber;
-        this.leftNumber = teamNumber;
+        this.leftNumber = leftNumber;
     }
 
 }

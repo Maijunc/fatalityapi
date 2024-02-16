@@ -2,6 +2,7 @@ package com.hdbc.controller;
 
 import com.hdbc.common.Result;
 import com.hdbc.common.ResultCode;
+import com.hdbc.handler.NoAuth;
 import com.hdbc.pojo.Group;
 import com.hdbc.pojo.GroupWithTasks;
 import com.hdbc.pojo.Task;
@@ -50,25 +51,34 @@ public class GroupController {
 
         //查询该groupID和taskID对应的task
         Task task = taskService.getTask(groupID,taskID);
-        if(task == null)
-            return Result.FAIL("未找到该小组对应的任务！");
 
-        //剩余任务人数-1
-        if(task.getLeftNumber() - 1 >= 0)
-            taskService.updateLeftNumber(groupID,taskID,1);
-        else
+        if(task == null) {
+            return Result.FAIL("未找到该小组对应的任务！");
+        }
+
+        if(task.getLeftNumber() - 1 < 0) {
             return Result.FAIL("该任务已满员!");
+        }
 
         //插入一条用户任务匹配数据
         if(!assignmentService.insert(userID,groupID,taskID,task.getTaskName())){
             return Result.FAIL(ResultCode.ASSIGNMENT_EXISTED);
         }
 
+        //剩余任务人数-1
+        taskService.updateLeftNumber(groupID, taskID, 1);
 
         //更新修改时间
         groupService.updateTime(groupID);
 
         return Result.SUCCESS();
+    }
+
+    @GetMapping("/getTasksByGroupID")
+    @NoAuth
+    public Result getTasksByGroupID(Integer groupID)
+    {
+        return Result.SUCCESS(taskService.getTasks(groupID));
     }
 
 }

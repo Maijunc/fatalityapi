@@ -11,7 +11,7 @@ import java.util.List;
 @Mapper
 public interface TaskMapper {
     @Insert("insert into t_task(task_id, task_name, team_number, left_number, group_id)" +
-    "values (#{task.taskID},#{task.taskName},#{task.teamNumber},#{task.leftNumber},#{groupID})")
+    "values (#{task.taskID},#{task.taskName},#{task.teamNumber},#{task.teamNumber},#{groupID})")
     void insert(Task task, Integer groupID);
 
     @Update("update t_task set left_number = left_number - #{num} where task_id = #{taskID} and "

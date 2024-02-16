@@ -59,7 +59,6 @@ public class UserServiceImpl implements UserService{
         String uuid = UUID.randomUUID().toString();
         System.out.println(res);
         redisTemplate.opsForValue().set(RedisKey.WX_SESSION_ID + uuid, res, 30, TimeUnit.MINUTES);
-        System.out.println(redisTemplate.opsForValue().get("wx_session_id6b07674e-edec-4d79-9749-dfcbf7936596"));
         return uuid;
     }
 
