@@ -29,7 +29,7 @@ public class UserDto implements Serializable {
     private String background;
     private String portrait;
 
-    private String openId;
+    private String openid;
 
     private String wxUnionId;
 
@@ -47,7 +47,7 @@ public class UserDto implements Serializable {
         this.password = "";
         this.phoneNumber = "";
         this.gender = wxUserInfo.getGender();
-        this.openId = wxUserInfo.getOpenId();
+        this.openid = wxUserInfo.getOpenId();
         this.wxUnionId = wxUserInfo.getUnionId();
     }
 }

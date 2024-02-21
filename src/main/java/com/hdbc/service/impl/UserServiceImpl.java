@@ -2,6 +2,7 @@ package com.hdbc.service.impl;
 
 import cn.hutool.http.HttpUtil;
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.hdbc.common.RedisKey;
 import com.hdbc.common.Result;
 import com.hdbc.handler.UserThreadLocal;
@@ -19,9 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
-import org.apache.commons.lang3.StringUtils;
 
-import java.sql.Wrapper;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -58,6 +57,13 @@ public class UserServiceImpl implements UserService{
         //随机生成一个uuid对应一个用户
         String uuid = UUID.randomUUID().toString();
         System.out.println(res);
+        JSONObject jsonObject = JSONObject.parseObject(res);
+        // 获取到key为shoppingCartItemList的值
+        String sessionKey = jsonObject.getString("session_key");
+        String openid = jsonObject.getString("openid");
+        System.out.println(sessionKey);
+        System.out.println(openid);
+
         redisTemplate.opsForValue().set(RedisKey.WX_SESSION_ID + uuid, res, 30, TimeUnit.MINUTES);
         return uuid;
     }
@@ -82,6 +88,7 @@ public class UserServiceImpl implements UserService{
          */
         try {
             String json = wxService.wxDecrypt(wxAuth.getEncryptedData(), wxAuth.getSessionId(), wxAuth.getIv());
+            System.out.println(json);
             WxUserInfo wxUserInfo = JSON.parseObject(json,WxUserInfo.class);
             String openid = wxUserInfo.getOpenId();
             User user = userMapper.selectByOpenId(openid);
@@ -93,6 +100,7 @@ public class UserServiceImpl implements UserService{
                 return this.register(userDto);
             }else {
                 userDto.setId(user.getUserID());
+                userDto.setNickname(user.getNickname());
                 //登录
                 return this.login(userDto);
             }
@@ -121,7 +129,7 @@ public class UserServiceImpl implements UserService{
     private Result login(UserDto userDto) {
         String token = JWTUtils.sign(userDto.getId());
         userDto.setToken(token);
-        userDto.setOpenId(null);
+        userDto.setOpenid(null);
         userDto.setWxUnionId(null);
         redisTemplate.opsForValue().set(RedisKey.TOKEN+token,JSON.toJSONString(userDto),7, TimeUnit.DAYS);
         return Result.SUCCESS(userDto);
@@ -129,6 +137,7 @@ public class UserServiceImpl implements UserService{
 
     private Result register(UserDto userDto) {
         User user = new User();
+        userDto.setNickname(wxService.getStringRandom(10));
         BeanUtils.copyProperties(userDto,user);
         this.userMapper.insert(user);
         userDto.setId(user.getUserID());

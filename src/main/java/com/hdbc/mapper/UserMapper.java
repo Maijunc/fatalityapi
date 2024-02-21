@@ -23,6 +23,9 @@ public interface UserMapper{
     List<Group> getGroups(Integer userID);
 
     @Select("SELECT * FROM t_user WHERE openid = #{openid} LIMIT 1")
+    @Results({
+            @Result(property = "userID", column = "user_id"),
+    })
     User selectByOpenId(@Param("openid") String openid);
 
     void insert(User user);
