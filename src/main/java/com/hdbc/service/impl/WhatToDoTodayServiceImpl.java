@@ -53,5 +53,15 @@ public class WhatToDoTodayServiceImpl implements WhatToDoTodayService {
         return Result.SUCCESS();
     }
 
+    @Override
+    public Result deletePool(long userID, String poolName) {
+
+        if(userTaskPoolMapper.deletePool(userID,poolName) == 0)
+        {
+            return Result.FAIL(ResultCode.POOL_NOT_EXIST);
+        }
+
+        return Result.SUCCESS();
+    }
 
 }

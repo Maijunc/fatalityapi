@@ -1,9 +1,6 @@
 package com.hdbc.mapper;
 
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Options;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -19,4 +16,7 @@ public interface UserTaskPoolMapper {
             "values (#{userID},#{taskName},#{poolName})")
     @Options(useGeneratedKeys=true, keyColumn="user_task_id")
     void setPool(long userID, String taskName, String poolName);
+
+    @Delete("delete from user_task_pool where user_id = #{userID} and pool_name = #{poolName}")
+    int deletePool(long userID, String poolName);
 }

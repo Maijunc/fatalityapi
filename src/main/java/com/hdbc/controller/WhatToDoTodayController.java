@@ -8,6 +8,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 
 @RestController
 @RequestMapping("whatToDoToday")
@@ -37,7 +39,20 @@ public class WhatToDoTodayController {
     public Result setPool(@RequestBody Pool pool)
     {
         log.info("设置用户事务池");
-        whatToDoTodayService.setPool(pool);
-        return Result.SUCCESS();
+        Result result = whatToDoTodayService.setPool(pool);
+        return result;
+    }
+
+    @PostMapping("/deletePool")
+    public Result deletePool(@RequestBody Map<String, String> requestBody)
+    {
+        String userID = requestBody.get("userID");
+        String poolName = requestBody.get("poolName");
+
+        Long userIdLong = Long.valueOf(userID);
+
+        log.info("删除用户事务池");
+        Result result = whatToDoTodayService.deletePool(userIdLong,poolName);
+        return result;
     }
 }

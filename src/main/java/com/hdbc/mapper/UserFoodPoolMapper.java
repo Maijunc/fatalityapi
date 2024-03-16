@@ -2,10 +2,7 @@ package com.hdbc.mapper;
 
 import com.hdbc.common.Result;
 import com.hdbc.pojo.Pool;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Options;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -21,4 +18,7 @@ public interface UserFoodPoolMapper {
             "values (#{userID},#{foodName},#{poolName})")
     @Options(useGeneratedKeys=true, keyColumn="user_food_id")
     void setPool(long userID, String foodName, String poolName);
+
+    @Delete("delete from user_food_pool where user_id = #{userID} and pool_name = #{poolName}")
+    int deletePool(long userID, String poolName);
 }

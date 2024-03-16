@@ -6,4 +6,5 @@ public interface GroupService {
     void insert(Group group);
 
     void updateTime(Integer groupID);
+
 }

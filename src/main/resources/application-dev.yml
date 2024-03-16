@@ -1,16 +1,19 @@
+myconfig:
+#  ip-address: *****
+
 spring:
   servlet:
     multipart:
       max-request-size: 100MB
       max-file-size: 100MB
   datasource:
-    url: jdbc:mysql://8.134.153.172:3306/fatality
+    url: jdbc:mysql://${myconfig.ip-address}:3306/fatality
     username: admin
-    password: Hdbc_2024
+#    password: ******
     driver-class-name: com.mysql.cj.jdbc.Driver
   data:
     redis:
-      host: 8.134.153.172
+      host: ${myconfig.ip-address}
       port: 6379
       database: 0
       jedis:
@@ -20,7 +23,7 @@ spring:
           max-idle: 8
           min-idle: 0
       timeout: 20000ms
-      password: 123456
+      password: Hdbc_2024
   application:
     name: fatality
 

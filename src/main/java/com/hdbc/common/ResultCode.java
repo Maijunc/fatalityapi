@@ -25,6 +25,7 @@ public enum ResultCode {
     USER_HAS_EXISTED(20005, "用户已存在"),
     POOL_NAME_EXISTED(20006,"插入池子名称已存在"),
     ASSIGNMENT_EXISTED(20007,"已为该用户分配任务"),
+    POOL_NOT_EXIST(20008,"池子不存在"),
 
     /* 业务错误：30001-39999 */
     GROUP_NO_FOUND(30001,"该用户没有历史记录"),

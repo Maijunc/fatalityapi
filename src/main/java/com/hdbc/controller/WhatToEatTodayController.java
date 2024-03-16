@@ -8,6 +8,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 
 @RestController
 @RequestMapping("whatToEatToday")
@@ -17,7 +19,6 @@ public class WhatToEatTodayController {
     @Autowired
     private WhatToEatTodayService whatToEatTodayService;
     @GetMapping("/getPool")
-    @NoAuth
     public Result getPool(Integer userID)
     {
         log.info("获取食物池");
@@ -33,11 +34,23 @@ public class WhatToEatTodayController {
     }
 
     @PostMapping("/setPool")
-    @NoAuth
     public Result setPool(@RequestBody Pool pool)
     {
         log.info("设置用户食物池");
-        whatToEatTodayService.setPool(pool);
-        return Result.SUCCESS();
+        Result result = whatToEatTodayService.setPool(pool);
+        return result;
+    }
+
+    @PostMapping("/deletePool")
+    public Result deletePool(@RequestBody Map<String, String> requestBody)
+    {
+        String userID = requestBody.get("userID");
+        String poolName = requestBody.get("poolName");
+
+        Long userIdLong = Long.valueOf(userID);
+
+        log.info("删除用户食物池");
+        Result result = whatToEatTodayService.deletePool(userIdLong,poolName);
+        return result;
     }
 }

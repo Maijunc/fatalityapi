@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Assignment {
     /** 用户ID */
-    private Integer userID ;
+    private Long userID ;
     /** 小组ID */
     private Integer groupID ;
     /** 任务ID */

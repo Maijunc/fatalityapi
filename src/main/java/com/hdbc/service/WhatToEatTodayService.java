@@ -11,4 +11,6 @@ public interface WhatToEatTodayService {
     List<String> getDefaultPool(String aspect, String defaultPoolName);
 
     Result setPool(Pool pool);
+
+    Result deletePool(long userID, String poolName);
 }

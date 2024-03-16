@@ -45,7 +45,8 @@ public class GroupController {
     }
 
     @GetMapping("/assignTask")
-    public Result assignTask(Integer userID, Integer groupID, Integer taskID)
+    @NoAuth
+    public Result assignTask(Long userID, Integer groupID, Integer taskID)
     {
         log.info("分配任务");
 
@@ -61,7 +62,7 @@ public class GroupController {
         }
 
         //插入一条用户任务匹配数据
-        if(!assignmentService.insert(userID,groupID,taskID,task.getTaskName())){
+        if(!assignmentService.assign(userID,groupID,taskID,task.getTaskName())){
             return Result.FAIL(ResultCode.ASSIGNMENT_EXISTED);
         }
 
@@ -81,4 +82,11 @@ public class GroupController {
         return Result.SUCCESS(taskService.getTasks(groupID));
     }
 
+    @GetMapping("/joinGroup")
+    public Result joinGroup(Long userID, Integer groupID)
+    {
+        assignmentService.joinGroup(userID,groupID);
+
+        return Result.SUCCESS();
+    }
 }
