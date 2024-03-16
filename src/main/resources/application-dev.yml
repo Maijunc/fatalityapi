@@ -6,7 +6,7 @@ spring:
   datasource:
     url: jdbc:mysql://8.134.153.172:3306/fatality
     username: admin
-    password: Hdbc_2024
+    password: *****
     driver-class-name: com.mysql.cj.jdbc.Driver
   data:
     redis:
