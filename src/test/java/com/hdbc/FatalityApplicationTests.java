@@ -1,5 +1,6 @@
 package com.hdbc;
 
+import com.hdbc.mapper.AssignmentMapper;
 import com.hdbc.mapper.UserMapper;
 import com.hdbc.pojo.User;
 import org.junit.jupiter.api.Test;
@@ -12,13 +13,12 @@ class FatalityApplicationTests {
 
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private AssignmentMapper assignmentMapper;
+
     @Test
     public void testInsert() {
-        User user = new User();
-        user.setNickname("test");
-        user.setOpenid("0000000");
-        userMapper.insert(user);
-        System.out.println(user);
+        System.out.println(assignmentMapper.check((long)4,26));
     }
 
 

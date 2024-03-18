@@ -3,7 +3,6 @@ package com.hdbc.service;
 import com.hdbc.common.Result;
 import com.hdbc.model.WXAuth;
 import com.hdbc.pojo.Group;
-import com.hdbc.pojo.GroupWithTasks;
 
 import java.util.List;
 
@@ -15,4 +14,6 @@ public interface UserService {
     Result authLogin(WXAuth wxAuth);
 
     Result userinfo(Boolean refresh);
+
+    Result storeAvatarURL(String openid, String avatarURL);
 }

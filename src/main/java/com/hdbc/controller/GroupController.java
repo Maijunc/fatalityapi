@@ -45,7 +45,6 @@ public class GroupController {
     }
 
     @GetMapping("/assignTask")
-    @NoAuth
     public Result assignTask(Long userID, Integer groupID, Integer taskID)
     {
         log.info("分配任务");
@@ -85,8 +84,32 @@ public class GroupController {
     @GetMapping("/joinGroup")
     public Result joinGroup(Long userID, Integer groupID)
     {
-        assignmentService.joinGroup(userID,groupID);
+        //检查小组是否满员
+        if(assignmentService.groupIsFull(groupID))
+        {
+            return Result.FAIL(ResultCode.GROUP_IS_FULLED);
+        }
+        //检查用户是否已经是小组成员
+        if(!assignmentService.joinGroup(userID,groupID))
+        {
+            return Result.FAIL(ResultCode.USER_IS_IN_GROUP);
+        }
+
 
         return Result.SUCCESS();
+    }
+
+    //获取用户在小组内的分工信息
+    @GetMapping("/getAssignInfo")
+    public Result getAssignInfo(Long userID, Integer groupID)
+    {
+        return assignmentService.getAssignInfo(userID,groupID);
+    }
+
+    //随机分工
+    @GetMapping("/randomAssign")
+    public Result randomAssign(Integer groupID)
+    {
+        return assignmentService.randomAssign(groupID);
     }
 }

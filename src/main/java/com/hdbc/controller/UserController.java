@@ -83,4 +83,11 @@ public class UserController {
         }
 
     }
+
+    //把前端获取到到用户头像的临时地址存储到数据库中
+    @GetMapping("/storeAvatarURL")
+    public Result storeAvatarURL(String openid,String AvatarURL)
+    {
+        return userService.storeAvatarURL(openid,AvatarURL);
+    }
 }

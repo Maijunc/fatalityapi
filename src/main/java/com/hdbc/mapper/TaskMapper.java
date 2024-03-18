@@ -23,4 +23,8 @@ public interface TaskMapper {
 
     @Select("select task_id, task_name, team_number, left_number from t_task where group_id = #{groupID}")
     List<Task> getTasks(Integer groupID);
+
+    //获取小组对应的任务加起来的总人数
+    @Select("select ifnull(sum(team_number),0) from t_task where group_id = #{groupID}")
+    int getTeamNumberSumInGroup(Integer groupID);
 }

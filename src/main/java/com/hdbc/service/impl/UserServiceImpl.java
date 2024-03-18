@@ -56,13 +56,10 @@ public class UserServiceImpl implements UserService{
         String res = HttpUtil.get(replaceUrl);
         //随机生成一个uuid对应一个用户
         String uuid = UUID.randomUUID().toString();
-        System.out.println(res);
         JSONObject jsonObject = JSONObject.parseObject(res);
         // 获取到key为shoppingCartItemList的值
         String sessionKey = jsonObject.getString("session_key");
         String openid = jsonObject.getString("openid");
-        System.out.println(sessionKey);
-        System.out.println(openid);
 
         redisTemplate.opsForValue().set(RedisKey.WX_SESSION_ID + uuid, res, 30, TimeUnit.MINUTES);
         return uuid;
@@ -124,6 +121,13 @@ public class UserServiceImpl implements UserService{
             redisTemplate.opsForValue().set(RedisKey.TOKEN+token,JSON.toJSONString(userDto),7,TimeUnit.DAYS);
         }
         return Result.SUCCESS(userDto);
+    }
+
+    @Override
+    public Result storeAvatarURL(String openid, String avatarURL) {
+        userMapper.storeAvatarURL(openid, avatarURL);
+
+        return Result.SUCCESS();
     }
 
     private Result login(UserDto userDto) {

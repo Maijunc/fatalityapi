@@ -29,4 +29,7 @@ public interface UserMapper{
     User selectByOpenId(@Param("openid") String openid);
 
     void insert(User user);
+
+    @Update("update t_user set portrait = #{avatarURL} where openid = #{openid}")
+    void storeAvatarURL(String openid, String avatarURL);
 }
