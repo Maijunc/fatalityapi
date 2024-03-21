@@ -1,7 +1,5 @@
 package com.hdbc.mapper;
 
-import com.hdbc.common.Result;
-import com.hdbc.pojo.Pool;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -21,4 +19,9 @@ public interface UserFoodPoolMapper {
 
     @Delete("delete from user_food_pool where user_id = #{userID} and pool_name = #{poolName}")
     int deletePool(long userID, String poolName);
+
+    void insertItem(@Param("userID") Long userID, @Param("poolName")  String poolName, @Param("newItem")  String newItem);
+
+    @Delete("delete from user_food_pool where user_id = #{userID} and pool_name = #{poolName} and food_name = #{deleteItem}")
+    void deleteItem(Long userID, String poolName, String deleteItem);
 }

@@ -64,4 +64,16 @@ public class WhatToDoTodayServiceImpl implements WhatToDoTodayService {
         return Result.SUCCESS();
     }
 
+    @Override
+    public Result updatePool(Long userID, String poolName, List<String> newItems, List<String> deleteItems) {
+        //插入池子中新增的物品
+        for(String newItem : newItems)
+            userTaskPoolMapper.insertItem(userID,poolName,newItem);
+
+        for(String deleteItem : deleteItems)
+            userTaskPoolMapper.deleteItem(userID,poolName,deleteItem);
+
+        return Result.SUCCESS();
+    }
+
 }

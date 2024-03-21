@@ -25,12 +25,13 @@ public class AssignmentServiceImpl implements AssignmentService {
 
     @Override
     public boolean assign(Long userID, Integer groupID, Integer taskID, String taskName) {
-        Assignment assignment =assignmentMapper.getAssignment(userID,groupID);
+        Assignment assignment = assignmentMapper.getAssignment(userID,groupID);
 
         //如果还没有加入小组就先加入小组
         if(assignmentMapper.check(userID,groupID) <= 0){
             joinGroup(userID,groupID);
         }
+        //如果已经分配了任务，就返回失败
         else if(assignment.getTaskID() != null && assignment.getTaskName() != null){
             return false;
         }
@@ -73,7 +74,8 @@ public class AssignmentServiceImpl implements AssignmentService {
         List<Assignment> resultList = new ArrayList<>();
 
         int taskSum = 0;
-        for(Task task : taskMapper.getTasks(groupID))
+        List<Task> taskList = taskMapper.getTasks(groupID);
+        for(Task task : taskList)
         {
             int leftNum = task.getLeftNumber();
             for(int i = 0 ; i < leftNum; i++)
@@ -112,6 +114,9 @@ public class AssignmentServiceImpl implements AssignmentService {
         }
 
         //更新leftNumber为0
+        for(Task task : taskList)
+            taskMapper.updateLeftNumber(groupID, task.getTaskID(), task.getLeftNumber());
+
         return Result.SUCCESS(resultList);
     }
 

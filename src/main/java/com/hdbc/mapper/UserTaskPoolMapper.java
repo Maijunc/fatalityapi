@@ -19,4 +19,9 @@ public interface UserTaskPoolMapper {
 
     @Delete("delete from user_task_pool where user_id = #{userID} and pool_name = #{poolName}")
     int deletePool(long userID, String poolName);
+
+    void insertItem(@Param("userID") Long userID, @Param("poolName")  String poolName, @Param("newItem")  String newItem);
+
+    @Delete("delete from user_task_pool where user_id = #{userID} and pool_name = #{poolName} and task_name = #{deleteItem}")
+    void deleteItem(Long userID, String poolName, String deleteItem);
 }

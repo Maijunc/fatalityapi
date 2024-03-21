@@ -60,6 +60,12 @@ public class GroupController {
             return Result.FAIL("该任务已满员!");
         }
 
+        //检查小组是否满员
+        if(assignmentService.groupIsFull(groupID))
+        {
+            return Result.FAIL(ResultCode.GROUP_IS_FULLED);
+        }
+
         //插入一条用户任务匹配数据
         if(!assignmentService.assign(userID,groupID,taskID,task.getTaskName())){
             return Result.FAIL(ResultCode.ASSIGNMENT_EXISTED);
@@ -112,4 +118,5 @@ public class GroupController {
     {
         return assignmentService.randomAssign(groupID);
     }
+
 }

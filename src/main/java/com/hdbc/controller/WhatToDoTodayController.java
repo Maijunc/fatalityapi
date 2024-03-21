@@ -3,11 +3,13 @@ package com.hdbc.controller;
 import com.hdbc.common.Result;
 import com.hdbc.handler.NoAuth;
 import com.hdbc.pojo.Pool;
+import com.hdbc.pojo.UpdatePoolRequest;
 import com.hdbc.service.WhatToDoTodayService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 
@@ -53,6 +55,13 @@ public class WhatToDoTodayController {
 
         log.info("删除用户事务池");
         Result result = whatToDoTodayService.deletePool(userIdLong,poolName);
+        return result;
+    }
+
+    @PostMapping("/updatePool")
+    public Result updatePool(@RequestBody UpdatePoolRequest updatePoolRequest)
+    {
+        Result result =  whatToDoTodayService.updatePool(updatePoolRequest.getUserID(),updatePoolRequest.getPoolName(),updatePoolRequest.getNewItems(),updatePoolRequest.getDeleteItems());
         return result;
     }
 }

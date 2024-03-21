@@ -13,4 +13,6 @@ public interface WhatToEatTodayService {
     Result setPool(Pool pool);
 
     Result deletePool(long userID, String poolName);
+
+    Result updatePool(Long userID, String poolName, List<String> newItems, List<String> deleteItems);
 }

@@ -64,5 +64,17 @@ public class WhatToEatTodayServiceImpl implements WhatToEatTodayService{
         return Result.SUCCESS();
     }
 
+    @Override
+    public Result updatePool(Long userID, String poolName, List<String> newItems, List<String> deleteItems) {
+        //插入池子中新增的物品
+        for(String newItem : newItems)
+            userFoodPoolMapper.insertItem(userID,poolName,newItem);
+
+        for(String deleteItem : deleteItems)
+            userFoodPoolMapper.deleteItem(userID,poolName,deleteItem);
+
+        return Result.SUCCESS();
+    }
+
 
 }

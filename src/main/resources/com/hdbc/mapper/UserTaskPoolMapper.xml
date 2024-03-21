@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hdbc.mapper.UserTaskPoolMapper">
+    <insert id="insertItem">
+        INSERT INTO user_task_pool (user_id, task_name, pool_name)
+        SELECT #{userID}, #{newItem}, #{poolName}
+        FROM DUAL
+        WHERE NOT EXISTS (
+            SELECT *
+            FROM user_task_pool
+            WHERE user_id = #{userID}
+              AND task_name = #{newItem}
+              AND pool_name = #{poolName}
+        );
+    </insert>
+
+</mapper>

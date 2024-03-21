@@ -3,11 +3,13 @@ package com.hdbc.controller;
 import com.hdbc.common.Result;
 import com.hdbc.handler.NoAuth;
 import com.hdbc.pojo.Pool;
+import com.hdbc.pojo.UpdatePoolRequest;
 import com.hdbc.service.WhatToEatTodayService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 
@@ -51,6 +53,13 @@ public class WhatToEatTodayController {
 
         log.info("删除用户食物池");
         Result result = whatToEatTodayService.deletePool(userIdLong,poolName);
+        return result;
+    }
+
+    @PostMapping("/updatePool")
+    public Result updatePool(@RequestBody UpdatePoolRequest updatePoolRequest)
+    {
+        Result result =  whatToEatTodayService.updatePool(updatePoolRequest.getUserID(),updatePoolRequest.getPoolName(),updatePoolRequest.getNewItems(),updatePoolRequest.getDeleteItems());
         return result;
     }
 }
