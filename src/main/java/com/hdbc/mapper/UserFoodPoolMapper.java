@@ -33,4 +33,7 @@ public interface UserFoodPoolMapper {
     //批量删除
     void batchDeleteItems(@Param("userID") Long userID, @Param("poolName") String poolName, @Param("items") List<String> items);
 
+    @Delete("DELETE FROM user_food_pool WHERE user_id = #{userID} and pool_name = #{poolName} and food_name IS NULL")
+    void deleteNull(Long userID, String poolName);
+
 }

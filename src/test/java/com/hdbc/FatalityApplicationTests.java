@@ -7,6 +7,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.Arrays;
+import java.util.List;
+
 @SpringBootTest
 class FatalityApplicationTests {
 
@@ -19,7 +22,10 @@ class FatalityApplicationTests {
 
     @Test
     public void testInsert() {
-        userFoodPoolMapper.deleteItem((long)114,"测试池子名","7777");
+        Long userID = 114L;
+        String poolName = "空池子";
+
+        userFoodPoolMapper.deleteNull(userID,poolName);
     }
 
 

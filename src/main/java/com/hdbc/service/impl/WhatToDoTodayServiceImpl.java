@@ -9,6 +9,7 @@ import com.hdbc.service.WhatToDoTodayService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -31,6 +32,8 @@ public class WhatToDoTodayServiceImpl implements WhatToDoTodayService {
 
         for(String poolName : poolNameList){
             Pool tmp = new Pool(userID,poolName,userTaskPoolMapper.getPoolByName(userID, poolName));
+            if(tmp.getList().get(0) == null)
+                tmp.setList(null);
             pools.add(tmp);
         }
         return pools;
@@ -43,10 +46,16 @@ public class WhatToDoTodayServiceImpl implements WhatToDoTodayService {
 
     @Override
     public Result setPool(Pool pool) {
+        //已经存在该池子
         if(!userTaskPoolMapper.getPoolByName(pool.getUserID(),pool.getPoolName()).isEmpty()){
             return Result.FAIL(ResultCode.POOL_NAME_EXISTED);
         }
-        for(String taskName : pool.getList()){
+        List<String> poolList = pool.getList();
+        //如果传过来是空数据或者是空值，就生成一条任务名为null的数据
+        if(poolList.isEmpty() || poolList == null)
+            userTaskPoolMapper.setPool(pool.getUserID(), null, pool.getPoolName());
+
+        for(String taskName : poolList){
             userTaskPoolMapper.setPool(pool.getUserID(), taskName, pool.getPoolName());
         }
 
@@ -67,12 +76,29 @@ public class WhatToDoTodayServiceImpl implements WhatToDoTodayService {
     @Override
     public Result updatePool(Long userID, String poolName, List<String> newItems, List<String> deleteItems) {
         //插入池子中新增的物品
-        for(String newItem : newItems)
-            userTaskPoolMapper.insertItem(userID,poolName,newItem);
+        List<String> poolInDB = userTaskPoolMapper.getPoolByName(userID,poolName);
+        //重复性检验
+        Iterator<String> iterator = newItems.iterator();
+        while (iterator.hasNext()) {
+            String newitem = iterator.next();
+            for (String item : poolInDB) {
+                //防止空指针
+                if(item == null)
+                    continue;
+                if (item.equals(newitem)) {
+                    iterator.remove();
+                    break; // 只需要删除一次
+                }
+            }
+        }
 
-        for(String deleteItem : deleteItems)
-            userTaskPoolMapper.deleteItem(userID,poolName,deleteItem);
+        if(!newItems.isEmpty()) {
+            //添加的时候删除空值
+            userTaskPoolMapper.deleteNull(userID,poolName);
 
+            userTaskPoolMapper.batchInsertItems(userID, poolName, newItems);
+        }
+        userTaskPoolMapper.batchDeleteItems(userID, poolName, deleteItems);
         return Result.SUCCESS();
     }
 

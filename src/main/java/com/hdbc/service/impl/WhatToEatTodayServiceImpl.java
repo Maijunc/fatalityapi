@@ -32,6 +32,8 @@ public class WhatToEatTodayServiceImpl implements WhatToEatTodayService{
 
         for(String poolName : poolNameList){
             Pool tmp = new Pool(userID,poolName,userFoodPoolMapper.getPoolByName(userID, poolName));
+            if(tmp.getList().get(0) == null)
+                tmp.setList(null);
             pools.add(tmp);
         }
         return pools;
@@ -44,11 +46,17 @@ public class WhatToEatTodayServiceImpl implements WhatToEatTodayService{
 
     @Override
     public Result setPool(Pool pool) {
+        //已经存在该池子
         if(!userFoodPoolMapper.getPoolByName(pool.getUserID(),pool.getPoolName()).isEmpty()){
             return Result.FAIL(ResultCode.POOL_NAME_EXISTED);
         }
-        for(String foodName : pool.getList()){
-            userFoodPoolMapper.setPool(pool.getUserID(), foodName, pool.getPoolName());
+        List<String> poolList = pool.getList();
+        //如果传过来是空数据或者是空值，就生成一条任务名为null的数据
+        if(poolList.isEmpty() || poolList == null)
+            userFoodPoolMapper.setPool(pool.getUserID(), null, pool.getPoolName());
+
+        for(String taskName : poolList){
+            userFoodPoolMapper.setPool(pool.getUserID(), taskName, pool.getPoolName());
         }
 
         return Result.SUCCESS();
@@ -81,6 +89,9 @@ public class WhatToEatTodayServiceImpl implements WhatToEatTodayService{
         while (iterator.hasNext()) {
             String newitem = iterator.next();
             for (String item : poolInDB) {
+                //防止空指针
+                if(item == null)
+                    continue;
                 if (item.equals(newitem)) {
                     iterator.remove();
                     break; // 只需要删除一次
@@ -88,8 +99,12 @@ public class WhatToEatTodayServiceImpl implements WhatToEatTodayService{
             }
         }
 
-        if(!newItems.isEmpty())
-            userFoodPoolMapper.batchInsertItems(userID,poolName,newItems);
+        if(!newItems.isEmpty()) {
+            //添加的时候删除空值
+            userFoodPoolMapper.deleteNull(userID,poolName);
+
+            userFoodPoolMapper.batchInsertItems(userID, poolName, newItems);
+        }
         userFoodPoolMapper.batchDeleteItems(userID, poolName, deleteItems);
         return Result.SUCCESS();
     }

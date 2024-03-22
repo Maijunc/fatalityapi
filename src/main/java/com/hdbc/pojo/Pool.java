@@ -15,5 +15,6 @@ public class Pool {
     private long userID;
     private String poolName;
 
+    //item list
     private List<String> list;
 }

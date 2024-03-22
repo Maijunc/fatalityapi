@@ -20,8 +20,19 @@ public interface UserTaskPoolMapper {
     @Delete("delete from user_task_pool where user_id = #{userID} and pool_name = #{poolName}")
     int deletePool(long userID, String poolName);
 
+    //插入单个内容
     void insertItem(@Param("userID") Long userID, @Param("poolName")  String poolName, @Param("newItem")  String newItem);
 
+    //删除单个内容
     @Delete("delete from user_task_pool where user_id = #{userID} and pool_name = #{poolName} and task_name = #{deleteItem}")
     void deleteItem(Long userID, String poolName, String deleteItem);
+
+    //批量插入
+    void batchInsertItems(@Param("userID") Long userID, @Param("poolName") String poolName, @Param("items") List<String> items);
+
+    //批量删除
+    void batchDeleteItems(@Param("userID") Long userID, @Param("poolName") String poolName, @Param("items") List<String> items);
+
+    @Delete("DELETE FROM user_task_pool WHERE user_id = #{userID} and pool_name = #{poolName} and task_name IS NULL")
+    void deleteNull(Long userID, String poolName);
 }
