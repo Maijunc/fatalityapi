@@ -9,6 +9,7 @@ import com.hdbc.service.WhatToEatTodayService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -66,13 +67,30 @@ public class WhatToEatTodayServiceImpl implements WhatToEatTodayService{
 
     @Override
     public Result updatePool(Long userID, String poolName, List<String> newItems, List<String> deleteItems) {
-        //插入池子中新增的物品
-        for(String newItem : newItems)
-            userFoodPoolMapper.insertItem(userID,poolName,newItem);
+//        //插入池子中新增的物品
+//        for(String newItem : newItems)
+//            userFoodPoolMapper.insertItem(userID,poolName,newItem);
+//
+//        for(String deleteItem : deleteItems)
+//            userFoodPoolMapper.deleteItem(userID,poolName,deleteItem);
+//
+//        return Result.SUCCESS();
+        List<String> poolInDB = userFoodPoolMapper.getPoolByName(userID,poolName);
+        //重复性检验
+        Iterator<String> iterator = newItems.iterator();
+        while (iterator.hasNext()) {
+            String newitem = iterator.next();
+            for (String item : poolInDB) {
+                if (item.equals(newitem)) {
+                    iterator.remove();
+                    break; // 只需要删除一次
+                }
+            }
+        }
 
-        for(String deleteItem : deleteItems)
-            userFoodPoolMapper.deleteItem(userID,poolName,deleteItem);
-
+        if(!newItems.isEmpty())
+            userFoodPoolMapper.batchInsertItems(userID,poolName,newItems);
+        userFoodPoolMapper.batchDeleteItems(userID, poolName, deleteItems);
         return Result.SUCCESS();
     }
 
