@@ -12,4 +12,6 @@ public interface AssignmentService {
     Result randomAssign(Integer groupID);
 
     boolean groupIsFull(Integer groupID);
+
+    Result getGroupMembers(Integer groupID);
 }

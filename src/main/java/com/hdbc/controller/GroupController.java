@@ -119,4 +119,9 @@ public class GroupController {
         return assignmentService.randomAssign(groupID);
     }
 
+    @GetMapping("/getGroupMembers")
+    public Result getGroupMembers(Integer groupID)
+    {
+        return assignmentService.getGroupMembers(groupID);
+    }
 }

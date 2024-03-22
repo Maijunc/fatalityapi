@@ -105,7 +105,8 @@ public class WhatToEatTodayServiceImpl implements WhatToEatTodayService{
 
             userFoodPoolMapper.batchInsertItems(userID, poolName, newItems);
         }
-        userFoodPoolMapper.batchDeleteItems(userID, poolName, deleteItems);
+        if(deleteItems != null && !deleteItems.isEmpty())
+            userFoodPoolMapper.batchDeleteItems(userID, poolName, deleteItems);
         return Result.SUCCESS();
     }
 

@@ -1,7 +1,7 @@
 package com.hdbc.mapper;
 
 import com.hdbc.pojo.Assignment;
-import com.hdbc.pojo.User;
+import com.hdbc.pojo.UserForShow;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -42,4 +42,6 @@ public interface AssignmentMapper {
     //获取小组成员数量
     @Select("select count(*) from t_assignment where group_id = #{groupID}")
     int getGroupMemberCount(Integer groupID);
+
+    List<UserForShow> getGroupMembers(Integer groupID);
 }

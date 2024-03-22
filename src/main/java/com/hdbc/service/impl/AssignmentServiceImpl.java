@@ -6,6 +6,8 @@ import com.hdbc.mapper.AssignmentMapper;
 import com.hdbc.mapper.TaskMapper;
 import com.hdbc.pojo.Assignment;
 import com.hdbc.pojo.Task;
+import com.hdbc.pojo.User;
+import com.hdbc.pojo.UserForShow;
 import com.hdbc.service.AssignmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -123,6 +125,12 @@ public class AssignmentServiceImpl implements AssignmentService {
     @Override
     public boolean groupIsFull(Integer groupID) {
         return assignmentMapper.getGroupMemberCount(groupID) >= taskMapper.getTeamNumberSumInGroup(groupID);
+    }
+
+    @Override
+    public Result getGroupMembers(Integer groupID) {
+        List<UserForShow> res = assignmentMapper.getGroupMembers(groupID);
+        return Result.SUCCESS(res);
     }
 
 

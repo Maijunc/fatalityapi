@@ -98,7 +98,8 @@ public class WhatToDoTodayServiceImpl implements WhatToDoTodayService {
 
             userTaskPoolMapper.batchInsertItems(userID, poolName, newItems);
         }
-        userTaskPoolMapper.batchDeleteItems(userID, poolName, deleteItems);
+        if(deleteItems != null && !deleteItems.isEmpty())
+            userTaskPoolMapper.batchDeleteItems(userID, poolName, deleteItems);
         return Result.SUCCESS();
     }
 
